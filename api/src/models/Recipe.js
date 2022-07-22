@@ -21,8 +21,15 @@ module.exports = (sequelize) => {
     healthScore: {
       type: DataTypes.INTEGER
     },
+    puntuation: {
+      type: DataTypes.INTEGER
+    },
     steps: {
       type: DataTypes.STRING
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
   });
 };

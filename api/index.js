@@ -18,10 +18,30 @@
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require('./src/app.js');
-const { conn } = require('./src/db.js');
+const { conn, Diet } = require('./src/db.js');
 
+// function preChargeDiets(){
+//   let dietsApi = [
+//     {name:'gluten free'}, 
+//     {name:'dairy free'}, 
+//     {name:'lacto ovo vegetarian'}, 
+//     {name:'vegan'}, 
+//     {name:'paleolithic'}, 
+//     {name:'primal'}, 
+//     {name:'whole 30'},
+//     {name:'pescatarian'},
+//     {name:'ketogenic'},
+//     {name:'fodmap friendly'},
+//     {name:'vegetarian'}
+// ];
+
+//   Diet.bulkCreate(dietsApi);  
+//   // res.send('Dietas ingresadas a la base de datos');
+
+// }
 // Syncing all the models at once.
-conn.sync({ force: true }).then(() => {
+conn.sync({ force: true }).then(async () => {
+  // await preChargeDiets();
   server.listen(3001, () => {
     console.log('%s listening at 3001'); // eslint-disable-line no-console
   });
