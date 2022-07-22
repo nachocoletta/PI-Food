@@ -18,6 +18,9 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    dishTypes: {
+      type: DataTypes.STRING
+    },
     healthScore: {
       type: DataTypes.INTEGER
     },
@@ -28,8 +31,9 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING
     },
     image: {
-      type: DataTypes.STRING,
-      allowNull: false
-    }
+      type: DataTypes.STRING
+      // allowNull: false
+    },
+
   });
 };
