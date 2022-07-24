@@ -24,7 +24,7 @@ const getApiInfo = async () => {
     // let recipesArray = [];
     
     const apiURL = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&addRecipeInformation=true&number=100`);
-    console.log("ESTA son las promesas ", apiURL);
+    // console.log("ESTA son las promesas ", apiURL);
     // console.log("este es el map" , apiURL.data.results[0])
 
     const apiRecipes = apiURL.data?.results.map(element => {
@@ -133,7 +133,7 @@ router.get('/recipes', async (req, res) => {
         let nameRecipes = allRecipes.filter(r => {
             r.name.toLowerCase().includes(name.toLowerCase())}
         );
-        console.log("nameRecipes: ", nameRecipes);
+        // console.log("nameRecipes: ", nameRecipes);
         nameRecipes.length ? res.status(200).send(nameRecipes) : 
                              res.status(404).send('Receta no encontrada');
     }else 
@@ -157,104 +157,71 @@ router.get('/recipes/:idReceta', async (req, res) => {
         let recipeId = await recipesById.filter(r => r.id == idReceta);
         recipeId.length? res.status(200).json(recipeId) : res.status(400).json({msg: "Id inexistente"}) 
     }
-        
-
- 
-    // const api = await axios(`https://api.spoonacular.com/recipes/${idReceta}/information?apiKey=${APIKEY}`) ; 
-    
-
-    // // console.log(api.data);
-    // // return true;
-    // const formatData = await api.data.results.map( (receta) => {
-    //     const obj = {
-    //         image: receta.image,
-    //         name: receta.name,
-    //         dishTypes: receta.dishTypes,
-    //         diets: receta.diets.map(r => r.diet),
-    //         summary: receta.summary,
-    //         healthScore: receta.healthScore,
-    //         steps: receta.analyzedInstructions[0]?.steps.map(el => {
-    //             return {
-    //                 number: el.number,
-    //                 step: el.step
-    //             }
-    //         })    
-    //     }
-    //     return obj;
-    // });
-
-
-    //     // const receta = await receta.findByPk(idReceta, {include: [{model: Diet}]});
-    // const recipeDB = await Recipe.findByPk(idReceta);
-    // // res.send(receta); 
-    
-
-    // const joinApiDB = [...formatData, ...recipeDB];
-
-    
-
-
-    // if(joinApiDB.length === 0)
-    //     return res.status(404).send("No se encontro receta por Id buscada");
-    // return res.json(joinApiDB);
 
 })
 
+async function buscarDietas() {
+    const apiURL = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&addRecipeInformation=true&number=100`);
+    const dietsApi = apiURL.data?.results.map(el => el.diets);
+    const dietSinRepetir = dietsApi.flat();
+
+    const newSet = [...new Set(dietSinRepetir)];
+    // console.log("New set", newSet)
+    const diet = newSet.map(id => ({id}));
+    // console.log("diet sin repetir ", dietSinRepetir)
+    // console.log("diet ", diet)
+    await Diet.bulkCreate(diet);
+}
 router.get('/diets', async (req,res) => {
-    // request a la api
-    // mapearla
-    // 
-
-    const api = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&addRecipeInformation=true`);
     
-    const apiData = api.data.results;
+    // const apiURL = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&addRecipeInformation=true&number`);
+    // const dietsApi = apiURL.data?.results.map(el => el.diets);
+    // const dietSinRepetir = dietsApi.flat();
 
-    if(apiData.length > 0) {
-        let apiDataMap = apiData.map(r => {
-            return {
-                id: element.id,
-                name: element.title,
-                image: element.image,
-                summary: element.summary,
-                // spoonacularScore: element.spoonacularScore,
-                healthScore: element.healthScore,
-                diets: element.diets.map(each => each ),
-                dishTypes: element.dishTypes, 
-                steps: element.analyzedInstructions[0]?.steps.map(each => { return each.step })
-            }
-        })
-    }
+    // const newSet = [...new Set(dietSinRepetir)];
+    // const diet = newSet.map(name => {
+    //     name
+    // });
     
-    let dietsApi = [
-        {name:'gluten free'}, 
-        {name:'dairy free'}, 
-        {name:'lacto ovo vegetarian'}, 
-        {name:'vegan'}, 
-        {name:'paleolithic'}, 
-        {name:'primal'}, 
-        {name:'whole 30'},
-        {name:'pescatarian'},
-        {name:'ketogenic'},
-        {name:'fodmap friendly'},
-        {name:'vegetarian'}
-    ];
+    // console.log("diet ", diet)
+    // await Diet.bulkCreate(diet);
+    // buscarDietas();
+
+    const diets = await Diet.findAll();
+    // console.log("diets ", diets)
+    return res.status(200).send(diets);
+    // let dietsApi = [
+    //     {name:'gluten free'}, 
+    //     {name:'dairy free'}, 
+    //     {name:'lacto ovo vegetarian'}, 
+    //     {name:'vegan'}, 
+    //     {name:'paleolithic'}, 
+    //     {name:'primal'}, 
+    //     {name:'whole 30'},
+    //     {name:'pescatarian'},
+    //     {name:'ketogenic'},
+    //     {name:'fodmap friendly'},
+    //     {name:'vegetarian'}
+    // ];
 
 
-    // ...dietsApi[index].name
-    for(let index in dietsApi){
-        // console.log(dietsApi[index].name);
-        Diet.findOrCreate(
-            {
-                where: {
-                    name: dietsApi[index].name
-                }
-            }
-        )
-    }
-        // console.log(`${index}: ${dietsApi[index].name}`)
+    // // ...dietsApi[index].name
+    // for(let index in dietsApi){
+    //     // console.log(dietsApi[index].name);
+    //     Diet.findOrCreate(
+    //         {
+    //             where: {
+    //                 name: dietsApi[index].name
+    //             }
+    //         }
+    //     )
+    // }
+    // console.log(`${index}: ${dietsApi[index].name}`)
     
     // await Diet.bulkCreate(dietsApi);  
-    res.send('Dietas ingresadas a la base de datos');
+    // const allDiets = await Diet.findAll();
+
+    // return res.status(200).json(allDiets); 
     
 });
 // Los campos mostrados en la ruta principal para cada receta (
