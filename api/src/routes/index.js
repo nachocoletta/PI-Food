@@ -252,15 +252,4 @@ router.post('/recipes', async (req, res) => {
    
 });
 
-
-
 module.exports = router;
-
-
-// https://api.spoonacular.com/recipes/complexSearch?apiKey=d4b24429f44b4506a61c0e7213cb4cc4&addRecipeInformation=true&number=100
-// GET https://api.spoonacular.com/recipes/complexSearch
-// Para obtener mayor información sobre las recetas, como por ejemplo el tipo de dieta deben agregar 
-// el flag &addRecipeInformation=true a este endpoint
-// Para los tipos de dieta deben tener en cuenta las propiedades vegetarian, vegan, glutenFree 
-// por un lado y también analizar las que se incluyan dentro de la propiedad diets
-// GET https://api.spoonacular.com/recipes/{id}/information
