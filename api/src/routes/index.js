@@ -1,5 +1,5 @@
 const { default: axios } = require('axios');
-const { Router } = require('express');
+const { Router, response } = require('express');
 const { format } = require('morgan');
 const { Op } = require('sequelize');
 // Importar todos los routers;
@@ -23,25 +23,32 @@ const getApiInfo = async () => {
     
     // let recipesArray = [];
     
-    const apiURL = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&addRecipeInformation=true&number=100`);
-    // console.log("ESTA son las promesas ", apiURL);
-    // console.log("este es el map" , apiURL.data.results[0])
+    try {
+        const apiURL = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&addRecipeInformation=true&number=100`)
+        
+        // console.log("ESTAS son las promesas ", apiURL);
+        // console.log("este es el map" , apiURL.data.results[0])
 
-    const apiRecipes = apiURL.data?.results.map(element => {
-        return {
-            id: element.id,
-            name: element.title,
-            image: element.image,
-            summary: element.summary,
-            // spoonacularScore: element.spoonacularScore,
-            healthScore: element.healthScore,
-            diets: element.diets.map(each => ({ name: each })),
-            dishTypes: element.dishTypes, 
-            steps: element.analyzedInstructions[0]?.steps.map(each => { return each.step })
-        }
-    })
-
-    return apiRecipes;
+        const apiRecipes = apiURL.data?.results.map(element => {
+            // console.log("ELEMENT: " , element)
+            return {
+                id: element.id,
+                name: element.title,
+                image: element.image,
+                summary: element.summary,
+                // spoonacularScore: element.spoonacularScore,
+                healthScore: element.healthScore,
+                diets: element.diets.map(each => ({ name: each })),
+                dishTypes: element.dishTypes, 
+                steps: element.analyzedInstructions[0]?.steps.map(each => { return each.step })
+            }
+        })
+        // console.log("apiRecipes " ,apiRecipes)
+        return apiRecipes;
+    }
+    catch(error){
+        console.log(error)
+    }
     // console.log("esto devuelve la api: ", apiURL.data.results) ;
     // // return apiURL;
     // const apiInfo = await apiURL.data.results.map( u => axios.get(u.url));
@@ -111,13 +118,19 @@ const getDbInfo = async () => {
 }
 
 const getAllRecipes = async () => {
-    const apiInfo = await getApiInfo();
-    // console.log("apiINFO en getAllRecipes", apiInfo);
-    const dBInfo = await getDbInfo();
-    // console.log("dbInfo en getAllRecipes: ", dBInfo);
-    const concatInfo = apiInfo.concat(dBInfo);
+    try {
+        const apiInfo = await getApiInfo();
+        // console.log("apiINFO en getAllRecipes", apiInfo);
+        const dBInfo = await getDbInfo();
+        // console.log("dbInfo en getAllRecipes: ", dBInfo);
+        const concatInfo = apiInfo.concat(dBInfo);
 
-    return concatInfo;
+        return concatInfo;
+    }catch(error)
+    {
+       console.log(error);
+        // return (error.message)
+    }
 }
 
 
@@ -125,23 +138,26 @@ router.get('/recipes', async (req, res) => {
 
     const { name } = req.query;
     // const apiInfo = await getApiInfo();
-    // console.log('Api INFO ', apiInfo);
+    //   console.log('Api INFO ', apiInfo);
     // res.status(200).json({apiInfo: apiInfo});
-    const allRecipes = await getAllRecipes();
-    
-    if(name){
-        let nameRecipes = allRecipes.filter(r => {
-            r.name.toLowerCase().includes(name.toLowerCase())}
-        );
-        // console.log("nameRecipes: ", nameRecipes);
-        nameRecipes.length ? res.status(200).send(nameRecipes) : 
-                             res.status(404).send('Receta no encontrada');
-    }else 
-    {
-        return res.status(200).send(allRecipes);
+    const allRecipes =  await getAllRecipes();
+    // console.log("allRecipes tiene: ", allRecipes)
+    try {
+        if(name){
+            let nameRecipes = allRecipes.filter(r => {
+                return r.name.toLowerCase().includes(name.toLowerCase())}
+            );
+            // console.log("nameRecipes: ", nameRecipes);
+            nameRecipes.length ? res.status(200).send(nameRecipes) : 
+                                 res.status(404).json({error: 'Receta no encontrada'});
+        }else 
+        {
+            return res.status(200).send(allRecipes);
+        }
     }
-
-  
+    catch(error){
+        return res.status(404).send('Error 404');
+    }
 
 })
 
@@ -153,25 +169,29 @@ router.get('/recipes/:idReceta', async (req, res) => {
     
     const recipesById = await getAllRecipes();
 
-    if(idReceta){
-        let recipeId = await recipesById.filter(r => r.id == idReceta);
-        recipeId.length? res.status(200).json(recipeId) : res.status(400).json({msg: "Id inexistente"}) 
+    try {
+        if(idReceta){
+            let recipeId = await recipesById.filter(r => r.id == idReceta);
+            recipeId.length? res.status(200).json(recipeId) : res.status(400).json({msg: "Id inexistente"}) 
+        }
     }
-
+    catch (error){
+        console.log(error)
+    }
 })
 
-async function buscarDietas() {
-    const apiURL = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&addRecipeInformation=true&number=100`);
-    const dietsApi = apiURL.data?.results.map(el => el.diets);
-    const dietSinRepetir = dietsApi.flat();
+// async function buscarDietas() {
+//     const apiURL = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&addRecipeInformation=true&number=10`);
+//     const dietsApi = apiURL.data?.results.map(el => el.diets);
+//     const dietSinRepetir = dietsApi.flat();
 
-    const newSet = [...new Set(dietSinRepetir)];
-    // console.log("New set", newSet)
-    const diet = newSet.map(id => ({id}));
-    // console.log("diet sin repetir ", dietSinRepetir)
-    // console.log("diet ", diet)
-    await Diet.bulkCreate(diet);
-}
+//     const newSet = [...new Set(dietSinRepetir)];
+//     // console.log("New set", newSet)
+//     const diet = newSet.map(id => ({id}));
+//     // console.log("diet sin repetir ", dietSinRepetir)
+//     // console.log("diet ", diet)
+//     await Diet.bulkCreate(diet);
+// }
 router.get('/diets', async (req,res) => {
     
     // const apiURL = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&addRecipeInformation=true&number`);

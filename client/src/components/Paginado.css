@@ -1,0 +1,16 @@
+.paginado {
+    display: flex;
+    flex-direction: row;
+    justify-self: center;
+    gap: 25px;
+    color: grey;
+    align-items: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    list-style: none;
+    position: relative;
+    margin: 10px auto;
+    cursor: pointer;
+    border: solid grey;
+    border-radius: 30%;
+    padding-right: 50px;
+}

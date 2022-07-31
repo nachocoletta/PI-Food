@@ -1,0 +1,30 @@
+.card {
+    /* background-color: gainsboro; */
+    height: 500px;
+    text-align: justify;
+    width: 25%;
+    min-width: 300px;
+    display: flex;
+    color: darkgoldenrod;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border-radius: 20px;
+    padding-top: 30px; 
+    /* gap: 5px; */
+    background-color: darkslategray;
+    opacity: 0.8;
+}
+
+img {
+    background-color: gainsboro;
+    width: 60%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center; 
+    border-radius: 20px;
+    padding-top: 30px;
+}
