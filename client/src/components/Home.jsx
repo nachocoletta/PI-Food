@@ -1,8 +1,8 @@
 import React from "react";
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { getRecipes, getRecipesByName} from "../actions";
-import { Link, NavLink } from "react-router-dom";
+import { getRecipes, getRecipesByName, filterRecipesByDiet, filterRecipeByHealtScore} from "../actions";
+import { NavLink } from "react-router-dom";
 import Card from "./Card";
 import Paginado from "./Paginado";
 import './Home.css'
@@ -12,6 +12,7 @@ export default function Home(){
 
     const [recipe, setRecipe] = useState('');
     const [error, setError] = useState('');
+    const [orden, setOrden] = useState('');
     
     const dispatch = useDispatch();
     
@@ -41,23 +42,49 @@ export default function Home(){
         // document.getElementsByName('recipeSearch').value = ''
     }
 
-    function searchRecipe(name){
-        // console.log("Name: ", name);
-        setCurrentPage(1)
-        dispatch(getRecipesByName(name));
-        setRecipe('')
+    // function searchRecipe(name){
+    //     // console.log("Name: ", name);
+    //     // alert("entro")
+    //     setCurrentPage(1)
+    //     dispatch(getRecipesByName(name));
+    //     setRecipe('')
         
-    }
+    // }
 
-    function validateRecipe(value){
-        if(!/^[A-Za-z\s]+$/.test(value)) {
+    function handleInput(e){
+        
+        if(!/^[A-Za-z\s]+$/.test(e.target.value)) {
             setError('La receta no puede contener caracteres especiales o numeros');
         }
         else {
             setError('');
             // searchRecipe(value);
         }
-        setRecipe(value);
+        // alert(e.target.value)
+        setRecipe(e.target.value);
+    }
+
+    function handleSumbit(e){
+        e.preventDefault();
+        // console.log(e)
+
+        dispatch(getRecipesByName(recipe))
+        // alert('A name was submitted: ');
+
+    }
+
+    function handleFilterRecipe(e){
+        e.preventDefault();
+        dispatch(filterRecipesByDiet(e.target.value))
+    }
+
+    function handleFilterRecipeByHealthScore(e){
+        // console.log('e.target.value: ', e.target.value)
+        e.preventDefault();
+ 
+        dispatch(filterRecipeByHealtScore(e.target.value))
+        setCurrentPage(1);
+        setOrden(`Ordenado ${e.target.value}`)
     }
 
     return (
@@ -67,18 +94,19 @@ export default function Home(){
                              color: "black", 
                              fontFamily: "cursive", 
                              fontSize: "25px"}} to= '/recipes'>Crear receta</NavLink>
-            <form onSubmit={e => {searchRecipe(e.target.value)}}>
-                <input type='text' name='recipeSearch' 
-                       value={recipe} 
+            <form onSubmit={handleSumbit}>
+                <input type='text'  
+                    //    value={recipe} 
                        className={error && 'danger'} 
                        placeholder="Buscar recetas..." 
-                       onBlur={e => {searchRecipe(e.target.value)}}
-                       onChange={e => {validateRecipe(e.target.value)}}
+                    //    onBlur={e => {searchRecipe(e.target.value)}}
+                       onChange={handleInput}
                 >
                 </input>
-            <input type="submit"></input>
-            <p>    {!error ? null : <span style={{color:"red"}}>{error}</span>} </p>
-
+                <button type="submit" >Enviar</button>
+                <div>
+                    <p>    {!error ? null : <span style={{color:"red"}}>{error}</span>} </p>
+                </div>
             </form>
             <button onClick={e => {handleClick(e)}}>
                 Volver a cargar todas las recetas
@@ -88,22 +116,22 @@ export default function Home(){
                     <option value='asc'>A-Z</option>
                     <option value='desc'>Z-A</option>
                 </select>
-                <select>
-                    <option selected value ={0}>Seleccionar Dieta</option>
-                    <option value='dairy-free'>dairy free</option>
-                    <option value='fodmap-friendly'>fodmap friendly</option>
-                    <option value='gluten-free'>gluten free</option>
+                <select onChange={e => handleFilterRecipe(e)}>
+                    <option selected value ='all'>All Diets</option>
+                    <option value='dairy free'>dairy free</option>
+                    <option value='fodmap friendly'>fodmap friendly</option>
+                    <option value='gluten free'>gluten free</option>
                     <option value='ketogenic'>ketogenic</option>
-                    <option value='lacto-ovo-vegetarian'>lacto ovo vegetarian</option>
+                    <option value='lacto ovo vegetarian'>lacto ovo vegetarian</option>
                     <option value='paleolithic'>paleolithic</option>
                     <option value='pescatarian'>pescatarian</option>
                     <option value='primal'>primal</option>
                     <option value='vegan'>vegan</option>
                     <option value='vegetarian'>vegetarian</option>
-                    <option value='whole-30'>whole 30</option>
+                    <option value='whole 30'>whole 30</option>
                     
                 </select>
-                <select>
+                <select onChange={e => handleFilterRecipeByHealthScore(e)}>
                     <option selected value={0}>Selecionar Health Score</option>
                     <option value='min'>Menos Saludable</option>
                     <option value='max'>Mas Saludable</option>
@@ -118,8 +146,7 @@ export default function Home(){
                 
                 <div className="cardsConatiner">
                 {
-                    
-                     allRecipes.length === 0 ?  <img src="https://i.stack.imgur.com/hzk6C.gif" alt="imagen"/> 
+                     allRecipes.length === 0 ?  <img style={{opacity: 0.7, width: "100%", alignItems:"center"}} src="https://i.stack.imgur.com/hzk6C.gif" alt="imagen"/> 
                      : (
                         // <img src="https://i.stack.imgur.com/hzk6C.gif" alt="imagen"/>
                         // console.log(allRecipes.length)
@@ -134,6 +161,7 @@ export default function Home(){
                                             name= {el.name} 
                                             image={el.image}
                                             diets={el.diets}
+                                            healthScore={el.healthScore}
                                         />
                                 
                             )

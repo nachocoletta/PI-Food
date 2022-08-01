@@ -1,5 +1,5 @@
  import axios from 'axios';
- import { GET_RECIPES, GET_RECIPES_BY_NAME } from './types.js'
+ import { GET_RECIPES, GET_RECIPES_BY_NAME, FILTER_BY_DIET, FILTER_BY_HEALTHSCORE} from './types.js'
 
 
  export function getRecipes(){
@@ -40,5 +40,21 @@
                 payload: [{error: "ERROR"}] 
             })
         }   
+    }
+ }
+
+ export function filterRecipesByDiet(payload){
+    // console.log(payload)
+    return {
+        type: FILTER_BY_DIET,
+        payload
+    }
+ }
+
+ export function filterRecipeByHealtScore(payload){
+    // console.log(payload);
+    return {
+        type: FILTER_BY_HEALTHSCORE,
+        payload
     }
  }

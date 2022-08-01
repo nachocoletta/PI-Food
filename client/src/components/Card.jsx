@@ -3,7 +3,7 @@ import './Card.css'
 
 
 
-export default function Card({ name, image, diets}){
+export default function Card({ name, image, diets, healthScore}){
     // console.log(steps[0] + " .....")
     // console.log(steps.length)
     // console.log(diets)
@@ -14,6 +14,8 @@ export default function Card({ name, image, diets}){
             <h2>Diets</h2>
             <ul>{diets.map(e => { return <li key={e.name}> {e.name} </li> })}
             </ul>
+            <h3>Healthscore: {healthScore}</h3>
+            
         </div>
     )
 }
