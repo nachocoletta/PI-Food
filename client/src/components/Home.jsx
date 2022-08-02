@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { getRecipes, getRecipesByName, filterRecipesByDiet, filterRecipeByHealtScore} from "../actions";
+import { getRecipes, getRecipesByName, filterRecipesByDiet, filterRecipeByHealtScore, filterRecipeByName} from "../actions";
 import { NavLink } from "react-router-dom";
 import Card from "./Card";
 import Paginado from "./Paginado";
@@ -87,6 +87,13 @@ export default function Home(){
         setOrden(`Ordenado ${e.target.value}`)
     }
 
+    function handleFilterRecipeByName(e) {
+        e.preventDefault();
+
+        dispatch(filterRecipeByName(e.target.value))
+        setCurrentPage(1);
+        setOrden(`Ordenado ${e.target.value}`);
+    }
     return (
         <div className="homeContainer">
             <h1 style={{fontFamily: "cursive"}}>PI del ORTO</h1>
@@ -112,7 +119,7 @@ export default function Home(){
                 Volver a cargar todas las recetas
             </button>
             <div>
-                <select>
+                <select onChange={e => handleFilterRecipeByName(e)}>
                     <option value='asc'>A-Z</option>
                     <option value='desc'>Z-A</option>
                 </select>

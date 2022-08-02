@@ -1,5 +1,5 @@
  import axios from 'axios';
- import { GET_RECIPES, GET_RECIPES_BY_NAME, FILTER_BY_DIET, FILTER_BY_HEALTHSCORE} from './types.js'
+ import { GET_DIETS, GET_RECIPES, GET_RECIPES_BY_NAME, FILTER_BY_DIET, FILTER_BY_HEALTHSCORE, FILTER_BY_RECIPENAME} from './types.js'
 
 
  export function getRecipes(){
@@ -22,6 +22,37 @@
     } 
  }
 
+ export function getDiets() {
+    return async function (dispatch){
+        try{
+            var json = await axios.get('http://localhost:3001/diets')
+            // .then(response => { console.log("Response: ", response)})
+            .catch(error => {console.log("Error: ", error)})
+            return dispatch({
+                type: GET_DIETS,
+                payload: json.data
+            })
+        }catch (error){
+            return dispatch({
+                type: GET_DIETS,
+                payload: [{error: "ERROR"}] })
+        }
+    }
+ }
+
+ export function postRecipe(payload) {
+    return async function(dispatch){
+        try {
+            var json = axios.post('http://localhost:3001/recipes',payload)
+            .catch(error => {console.log("Error: ", error)})
+            console.log(json)
+            return json;
+
+        }catch(error){
+            console.log(error)
+        }
+    }
+ }
  export function getRecipesByName(name){
     return async function(dispatch){
         try {
@@ -55,6 +86,14 @@
     // console.log(payload);
     return {
         type: FILTER_BY_HEALTHSCORE,
+        payload
+    }
+ }
+
+ export function filterRecipeByName(payload){
+
+    return {
+        type: FILTER_BY_RECIPENAME,
         payload
     }
  }
