@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { getRecipes, getRecipesByName, filterRecipesByDiet, filterRecipeByHealtScore, filterRecipeByName} from "../actions";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Card from "./Card";
 import Paginado from "./Paginado";
 import './Home.css'
@@ -96,7 +96,7 @@ export default function Home(){
     }
     return (
         <div className="homeContainer">
-            <h1 style={{fontFamily: "cursive"}}>PI del ORTO</h1>
+            <h1 style={{fontFamily: "cursive"}}>FOODS</h1>
             <NavLink style={{textDecoration: "none", 
                              color: "black", 
                              fontFamily: "cursive", 
@@ -162,7 +162,7 @@ export default function Home(){
                                 return( <h2>No se encontraron recetas</h2> )
                             }
                             return(
-                                
+                                <Link to={`/recipes/${el.id}`}>
                                         <Card
                                             key={el.id} 
                                             name= {el.name} 
@@ -170,7 +170,7 @@ export default function Home(){
                                             diets={el.diets}
                                             healthScore={el.healthScore}
                                         />
-                                
+                                </Link>
                             )
                         } ) 
                      ) 

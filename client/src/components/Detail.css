@@ -1,0 +1,55 @@
+ /* .detailContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+
+h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: cursive;
+}
+/* 
+img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 250px;
+    width: 200px;
+}  */
+
+.detailContainer {
+    /* background-color: gainsboro; */
+    position: absolute;
+    top: 15%;
+    left: 20%;
+    transform: translate(-50, -50);
+    height: auto;
+
+    width: 60%;
+    min-width: 400px;
+    /* display: flex; */
+    color: cornsilk;
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border-radius: 20px;
+    padding-top: 30px; 
+    /* gap: 5px; */
+    background-color: darkslategray;
+    opacity: 0.95 ;
+}
+
+img {
+    background-color: gainsboro;
+    width: 60%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center; 
+    border-radius: 20px;
+    padding-top: 30px;
+}

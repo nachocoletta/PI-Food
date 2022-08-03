@@ -1,9 +1,10 @@
-import { FILTER_BY_DIET, POST_RECIPE, GET_DIETS, GET_RECIPES, GET_RECIPES_BY_NAME, FILTER_BY_HEALTHSCORE, FILTER_BY_RECIPENAME } from '../actions/types'
+import { FILTER_BY_DIET, POST_RECIPE, GET_DIETS, GET_RECIPES, GET_RECIPES_BY_NAME, GET_RECIPES_BY_ID, FILTER_BY_HEALTHSCORE, FILTER_BY_RECIPENAME } from '../actions/types'
 
 const initialState = {
     recipes: [],
     recipes2: [],
-    diets: []
+    diets: [],
+    detail: []
 }
 
 function rootReducer(state = initialState, action) {
@@ -82,6 +83,12 @@ function rootReducer(state = initialState, action) {
             return {
                 ...state
             };
+        case GET_RECIPES_BY_ID:
+            // console.log("action: ", action)
+            return {
+                ...state,
+                detail: action.payload
+            }
         default:
             return state;
       }

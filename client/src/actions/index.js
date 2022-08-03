@@ -1,5 +1,5 @@
  import axios from 'axios';
- import { GET_DIETS, GET_RECIPES, GET_RECIPES_BY_NAME, FILTER_BY_DIET, FILTER_BY_HEALTHSCORE, FILTER_BY_RECIPENAME} from './types.js'
+ import { GET_DIETS, GET_RECIPES, GET_RECIPES_BY_NAME,GET_RECIPES_BY_ID, FILTER_BY_DIET, FILTER_BY_HEALTHSCORE, FILTER_BY_RECIPENAME} from './types.js'
 
 
  export function getRecipes(){
@@ -71,6 +71,23 @@
                 payload: [{error: "ERROR"}] 
             })
         }   
+    }
+ }
+
+ export function getRecipeDetail(id){
+    return async function(dispatch){
+        try {
+            console.log("entro aca") 
+            var json = await axios.get(`http://localhost:3001/recipes/${id}`)
+            .catch(error => {console.log("Error: ", error)})
+            console.log("Json. data: ", json.data)
+            return dispatch({
+                type: GET_RECIPES_BY_ID,
+                payload: json.data
+            })
+        }catch(error){
+            console.log(error)
+        }
     }
  }
 

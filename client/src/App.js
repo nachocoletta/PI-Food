@@ -11,8 +11,8 @@ function App() {
       <Switch>
         <Route exact path='/' component={LandingPage} />
         <Route path='/home' component={Home} />
-        <Route path='/recipes' component={RecipeCreate} /> 
-        {/* <Route path='/recipes/:idReceta' component={Detail} /> */}
+        <Route exact path='/recipes/:id' component={(match) => <Detail match={match} />} />
+        <Route exact path='/recipes' component={RecipeCreate} /> 
 
       </Switch>
     </BrowserRouter>
