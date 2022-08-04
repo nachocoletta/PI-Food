@@ -172,7 +172,7 @@ router.get('/recipes/:id', async (req, res) => {
     try {
         if(id){
             // console.log("Id: ", id)
-            let recipeId = await recipesById.find(r => r.id === parseInt(id));
+            let recipeId = await recipesById.find(r => r.id == id.toString());
             // console.log("RecipeId: ", recipeId)
             // recipeId.length? res.status(200).json(recipeId) : res.status(400).json({msg: "Id inexistente"}) 
             res.status(200).json(recipeId)

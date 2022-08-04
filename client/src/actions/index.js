@@ -41,6 +41,7 @@
  }
 
  export function postRecipe(payload) {
+    
     return async function(dispatch){
         try {
             var json = axios.post('http://localhost:3001/recipes',payload)
@@ -77,10 +78,10 @@
  export function getRecipeDetail(id){
     return async function(dispatch){
         try {
-            console.log("entro aca") 
+            // console.log("entro aca") 
             var json = await axios.get(`http://localhost:3001/recipes/${id}`)
             .catch(error => {console.log("Error: ", error)})
-            console.log("Json. data: ", json.data)
+            // console.log("Json. data: ", json.data)
             return dispatch({
                 type: GET_RECIPES_BY_ID,
                 payload: json.data

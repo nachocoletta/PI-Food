@@ -5,8 +5,75 @@ import { useDispatch, useSelector } from "react-redux";
 import { postRecipe, getDiets } from '../actions/index.js';
 // import Diets from './Diets'
 import "./RecipeCreate.css"
-const { default: axios } = require('axios');
 
+
+// function validate(input){
+//     let errors = {};
+
+//     if(!input.name){
+//         errors.name = "Nombre requerido"
+//     } 
+//     if(!input.summary){
+//         errors.summary = "Summary requerido"
+//     }
+
+//     if(input.healthScore < 0){
+//         errors.healthScore = "HelthScore no puede ser menor que 0"
+//     }
+//     if(input.healthScore > 100){
+//         errors.healthScore = "HelthScore no puede ser mayora a 100"
+//     }
+//     // console.log(errors)
+//     if(Object.entries(errors).length === 0){
+//         alert("No hay errores");
+//     }else
+//     {
+//         alert("Hay errores");
+//     }
+//     console.log("errors: ", errors)
+//     return errors;
+// }
+
+export default function RecipeCreate() {
+   
+    const dispatch = useDispatch();
+    const allDiets = useSelector((state) => state.diets);
+    // console.log("all diets:", allDiets);
+    const [disable, setDisable] = useState(true);
+    
+    const initialState = {
+        name: "",
+        summary: "",
+        healthScore: 0,
+        dishTypes: "",
+        steps: [""],
+        image: "",
+        diets: []
+    }
+    const [input, setInput] = useState(initialState);
+    const [errors, setErrors] = useState({});
+    const [message, setMessage] = useState("")
+    // const [inputSteps, setInputSteps] = useState([""]);
+
+    useEffect(() => {
+      dispatch(getDiets())
+    }, [dispatch])
+
+    function handleChange(e){
+        setMessage("")
+        setInput({
+            ...input,
+            [e.target.name]: e.target.value
+        })
+        setErrors(validate({
+            ...input,
+            [e.target.name]: e.target.value
+        }))
+        // console.log("Input: ",input);
+    }
+
+
+    
 function validate(input){
     let errors = {};
 
@@ -24,44 +91,12 @@ function validate(input){
         errors.healthScore = "HelthScore no puede ser mayora a 100"
     }
     // console.log(errors)
+    if(Object.entries(errors).length === 0){
+        setDisable(false)
+    }
+    // console.log("errors: ", errors)
     return errors;
 }
-
-export default function RecipeCreate() {
-   
-    const dispatch = useDispatch();
-    const allDiets = useSelector((state) => state.diets);
-    // console.log("all diets:", allDiets);
-    
-    const initialState = {
-        name: "",
-        summary: "",
-        healthScore: 0,
-        dishTypes: "",
-        steps: [""],
-        image: "",
-        diets: []
-    }
-    const [input, setInput] = useState(initialState);
-    const [errors, setErrors] = useState({});
-    // const [inputSteps, setInputSteps] = useState([""]);
-
-    useEffect(() => {
-      dispatch(getDiets())
-    }, [dispatch])
-
-    function handleChange(e){
-
-        setInput({
-            ...input,
-            [e.target.name]: e.target.value
-        })
-        setErrors(validate({
-            ...input,
-            [e.target.name]: e.target.value
-        }))
-        console.log("Input: ",input);
-    }
 
     function handleCheck(e){
         // console.log("arr prev: ", input.diets)
@@ -104,26 +139,41 @@ export default function RecipeCreate() {
        
     }
 
+    // function handleSubmitForm(e){
+    //     e.preventDefault();
+       
+    // }
     function handleSubmit(e){
+        
         e.preventDefault();
-
+        // console.log(input);
         try {
-            axios.post('http://localhost:3001/recipes', input)
-            .then((response) => {
-                alert(response.data);
-                setInput(initialState)
-            })
-            .catch(error => {console.log("Error: ", error)})
-        }
-        catch(error){
+            dispatch(postRecipe(input));
+            setMessage("RECETA CREADA EXITOSAMENTE");
+            e.target.reset();
+            setInput(initialState);
+        }catch(error)
+        {
             console.log(error)
         }
+        // try {
+        //     axios.post('http://localhost:3001/recipes', input)
+        //     .then((response) => {
+        //         // alert(response.data);
+        //         setInput(initialState)
+        //     })
+        //     .catch(error => {console.log("Error: ", error)})
+        // }
+        // catch(error){
+        //     console.log(error)
+        // }
     }
 
     return (
         <div>
             <Link to='/home'><button>Volver</button></Link>
             <h1>Crea tu Receta</h1>
+            <h2>{message}</h2>
             <form onSubmit={e => handleSubmit(e)}>
                 <div>
                     <label>Nombre: </label>
@@ -132,6 +182,7 @@ export default function RecipeCreate() {
                         value={input.name}
                         name="name"
                         onChange={handleChange}
+                      
                     />
                     {errors.name && (<p className='error'>{errors.name}</p>)}
                 </div>
@@ -148,7 +199,7 @@ export default function RecipeCreate() {
                 <div>
                     <label>Healthscore: </label>
                     <input
-                        type="text"
+                        type="number"
                         value={input.healthScore}
                         name="healthScore"
                         onChange={handleChange}
@@ -218,10 +269,11 @@ export default function RecipeCreate() {
                                    </div>)
                         })
                     }
-                    <button type="button" onClick={e => handleAddStep(e)}>Agregar paso</button>
+                    <button type="button"  onClick={e => handleAddStep(e)}>Agregar paso</button>
                     </div>
                 </div>
-                <button type='submit' className="botonCrearReceta">Crear Receta</button>
+              
+                <button type='submit' disabled={disable} className="botonCrearReceta" >Crear Receta</button>
             </form>
         </div>
 

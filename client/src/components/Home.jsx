@@ -19,7 +19,7 @@ export default function Home(){
     const allRecipes = useSelector((state) => state.recipes) // mapStateToProps
     // console.log('ALL RECIPES ES... ', allRecipes)
     const [currentPage, setCurrentPage] = useState(1);
-    const [recipesPerPage, setRecipesPerPage] = useState(9);
+    const [recipesPerPage] = useState(9);
     const indexOfLastRecipe = currentPage * recipesPerPage;
     const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
     const currentRecipe = allRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
@@ -37,9 +37,10 @@ export default function Home(){
 
     function handleClick(event){
         event.preventDefault(); // para que no recargue la pagina
+        setCurrentPage(1);
         dispatch(getRecipes());
         setRecipe('');
-        // document.getElementsByName('recipeSearch').value = ''
+       
     }
 
     // function searchRecipe(name){
@@ -67,7 +68,7 @@ export default function Home(){
     function handleSumbit(e){
         e.preventDefault();
         // console.log(e)
-
+        setCurrentPage(1)
         dispatch(getRecipesByName(recipe))
         // alert('A name was submitted: ');
 
@@ -75,15 +76,15 @@ export default function Home(){
 
     function handleFilterRecipe(e){
         e.preventDefault();
+        setCurrentPage(1);
         dispatch(filterRecipesByDiet(e.target.value))
     }
 
     function handleFilterRecipeByHealthScore(e){
         // console.log('e.target.value: ', e.target.value)
         e.preventDefault();
- 
-        dispatch(filterRecipeByHealtScore(e.target.value))
         setCurrentPage(1);
+        dispatch(filterRecipeByHealtScore(e.target.value))
         setOrden(`Ordenado ${e.target.value}`)
     }
 
@@ -124,7 +125,7 @@ export default function Home(){
                     <option value='desc'>Z-A</option>
                 </select>
                 <select onChange={e => handleFilterRecipe(e)}>
-                    <option selected value ='all'>All Diets</option>
+                    <option defaultValue={true} value ='all'>All Diets</option>
                     <option value='dairy free'>dairy free</option>
                     <option value='fodmap friendly'>fodmap friendly</option>
                     <option value='gluten free'>gluten free</option>
@@ -139,7 +140,7 @@ export default function Home(){
                     
                 </select>
                 <select onChange={e => handleFilterRecipeByHealthScore(e)}>
-                    <option selected value={0}>Selecionar Health Score</option>
+                    <option defaultValue={true} value={0}>Selecionar Health Score</option>
                     <option value='min'>Menos Saludable</option>
                     <option value='max'>Mas Saludable</option>
                 </select>
@@ -151,9 +152,9 @@ export default function Home(){
                 />
                 {/* https://upload.wikimedia.org/wikipedia/commons/b/b9/Youtube_loading_symbol_1_(wobbly).gif */}
                 
-                <div className="cardsConatiner">
+                <div className="cardsContainer">
                 {
-                     allRecipes.length === 0 ?  <img style={{opacity: 0.7, width: "100%", alignItems:"center"}} src="https://i.stack.imgur.com/hzk6C.gif" alt="imagen"/> 
+                     allRecipes.length === 0 ?  <img className="loading" style={{opacity: 0.7}} src="https://i.stack.imgur.com/hzk6C.gif" alt="imagen"/> 
                      : (
                         // <img src="https://i.stack.imgur.com/hzk6C.gif" alt="imagen"/>
                         // console.log(allRecipes.length)
@@ -162,15 +163,17 @@ export default function Home(){
                                 return( <h2>No se encontraron recetas</h2> )
                             }
                             return(
-                                <Link to={`/recipes/${el.id}`}>
+                                <NavLink style={{textDecoration: "none"}} key={el.id} to={`/recipes/${el.id}`}>
                                         <Card
-                                            key={el.id} 
+                                            id={el.id}
+                                            
                                             name= {el.name} 
                                             image={el.image}
                                             diets={el.diets}
                                             healthScore={el.healthScore}
                                         />
-                                </Link>
+                                </NavLink>
+                                
                             )
                         } ) 
                      ) 
