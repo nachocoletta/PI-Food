@@ -1,0 +1,18 @@
+.titulo {
+    font-family: cursive;
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50, -50);
+
+}
+
+.botonIngresar {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50, -50);
+    font-size: 25px;
+    cursor: pointer;
+
+}

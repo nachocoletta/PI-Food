@@ -15,9 +15,6 @@ const router = Router();
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 
-// router.get('/', (req, res) => {
-//     res.send('Hola');
-// });
 
 const getApiInfo = async () => {
     
@@ -49,62 +46,7 @@ const getApiInfo = async () => {
     catch(error){
         console.log(error)
     }
-    // console.log("esto devuelve la api: ", apiURL.data.results) ;
-    // // return apiURL;
-    // const apiInfo = await apiURL.data.results.map( u => axios.get(u.url));
-    // // console.log("Esto es apiInfo en getApiInfo: ", apiInfo)
-    // // return apiInfo;
-    
-    // let results = axios.all(apiInfo)
-    // .then( 
-    //     recipe => { 
-    //         recipe.map( r => {
-    //             recipesArray.push({
-    //                 name: r.title,
-    //                 summary: r.summary, 
-    //                 healthScore: r.healthScore,
-    //                 image: r.image,
-    //                 id: r.id,
-    //                 steps: r.analyzedInstructions[0]?.steps.map(el => {
-    //                     return {
-    //                         number: el.number,
-    //                         step: el.step
-    //                     }
-    //                 }),
-    //                 diets: r.diets.map(r => r.diet)
-    //             })
-    //         })
-    //      console.log("Arreglo de recetas ", recipesArray)
-    //      return recipesArray;
-    //     }
-    // )
-    // .catch(error => { console.log("Tipo de ERROR: ", error);
-    //     // res.status(404).send("Error en la promesa");
-    //     // throw new Error("Error de la promesa")
-    // })
-    // // res.status(404).send("Error en la promesa");
-    // console.log("hasta aca ejecuta RESULTS", results);
-    // return results;
-    
    
-    
-//     const apiInfo = await apiURL.data.map(recipe => {
-//         return {
-//             name: recipe.title,
-//             summary: recipe.summary, 
-//             healthScore: recipe.healthScore,
-//             image: recipe.image,
-//             id: recipe.id,
-//             steps: recipe.analyzedInstructions[0]?.steps.map(el => {
-//                 return {
-//                     number: el.number,
-//                     step: el.step
-//                 }
-//             })
-//         }
-        
-//     })
-//     return apiInfo;
 }
 
 const getDbInfo = async () => {
@@ -183,75 +125,14 @@ router.get('/recipes/:id', async (req, res) => {
     }
 })
 
-// async function buscarDietas() {
-//     const apiURL = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&addRecipeInformation=true&number=10`);
-//     const dietsApi = apiURL.data?.results.map(el => el.diets);
-//     const dietSinRepetir = dietsApi.flat();
-
-//     const newSet = [...new Set(dietSinRepetir)];
-//     // console.log("New set", newSet)
-//     const diet = newSet.map(id => ({id}));
-//     // console.log("diet sin repetir ", dietSinRepetir)
-//     // console.log("diet ", diet)
-//     await Diet.bulkCreate(diet);
-// }
 router.get('/diets', async (req,res) => {
     
-    // const apiURL = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&addRecipeInformation=true&number`);
-    // const dietsApi = apiURL.data?.results.map(el => el.diets);
-    // const dietSinRepetir = dietsApi.flat();
-
-    // const newSet = [...new Set(dietSinRepetir)];
-    // const diet = newSet.map(name => {
-    //     name
-    // });
-    
-    // console.log("diet ", diet)
-    // await Diet.bulkCreate(diet);
-    // buscarDietas();
-
+  
     const diets = await Diet.findAll();
     // console.log("diets ", diets)
-    return res.status(200).send(diets);
-    // let dietsApi = [
-    //     {name:'gluten free'}, 
-    //     {name:'dairy free'}, 
-    //     {name:'lacto ovo vegetarian'}, 
-    //     {name:'vegan'}, 
-    //     {name:'paleolithic'}, 
-    //     {name:'primal'}, 
-    //     {name:'whole 30'},
-    //     {name:'pescatarian'},
-    //     {name:'ketogenic'},
-    //     {name:'fodmap friendly'},
-    //     {name:'vegetarian'}
-    // ];
-
-
-    // // ...dietsApi[index].name
-    // for(let index in dietsApi){
-    //     // console.log(dietsApi[index].name);
-    //     Diet.findOrCreate(
-    //         {
-    //             where: {
-    //                 name: dietsApi[index].name
-    //             }
-    //         }
-    //     )
-    // }
-    // console.log(`${index}: ${dietsApi[index].name}`)
-    
-    // await Diet.bulkCreate(dietsApi);  
-    // const allDiets = await Diet.findAll();
-
-    // return res.status(200).json(allDiets); 
-    
+    return res.status(200).send(diets);    
 });
-// Los campos mostrados en la ruta principal para cada receta (
-//  Nivel de "comida saludable" (health score)
-//  Paso a paso
-
- // 
+ 
 router.post('/recipes', async (req, res) => { 
 
     const { name, summary, healthScore, dishTypes, steps, image, diets } = req.body;

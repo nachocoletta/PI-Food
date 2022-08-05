@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { getRecipes, getRecipesByName, filterRecipesByDiet, filterRecipeByHealtScore, filterRecipeByName} from "../actions";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Card from "./Card";
 import Paginado from "./Paginado";
 import './Home.css'
@@ -86,6 +86,8 @@ export default function Home(){
         setCurrentPage(1);
         dispatch(filterRecipeByHealtScore(e.target.value))
         setOrden(`Ordenado ${e.target.value}`)
+        if(orden === 'asd')
+            console.log(orden)
     }
 
     function handleFilterRecipeByName(e) {
