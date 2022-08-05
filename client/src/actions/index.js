@@ -46,7 +46,7 @@
         try {
             var json = axios.post('http://localhost:3001/recipes',payload)
             .catch(error => {console.log("Error: ", error)})
-            console.log(json)
+         //   console.log(json)
             return json;
 
         }catch(error){
