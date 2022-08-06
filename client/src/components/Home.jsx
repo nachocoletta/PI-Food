@@ -99,11 +99,12 @@ export default function Home(){
     }
     return (
         <div className="homeContainer">
-            <h1 style={{fontFamily: "cursive"}}>FOODS</h1>
+            {/* <h1 className="mainTitle">FOODS</h1> */}
             <NavLink style={{textDecoration: "none", 
-                             color: "black", 
+                             color: "green", 
                              fontFamily: "cursive", 
-                             fontSize: "25px"}} to= '/recipes'>Crear receta</NavLink>
+                             fontSize: "25px",
+                             padding: "15px"}} to= '/recipes'>Crear receta</NavLink>
             <form onSubmit={handleSumbit}>
                 <input type='text'  
                     //    value={recipe} 
@@ -118,8 +119,9 @@ export default function Home(){
                     <p>    {!error ? null : <span style={{color:"red"}}>{error}</span>} </p>
                 </div>
             </form>
-            <button onClick={e => {handleClick(e)}}>
-                Volver a cargar todas las recetas
+            <button style={{padding: "15px", margin: "20px"}}
+                onClick={e => {handleClick(e)}}>
+                    Recargar Recetas
             </button>
             <div>
                 <select onChange={e => handleFilterRecipeByName(e)}>

@@ -44,7 +44,7 @@ export default function RecipeCreate() {
     const initialState = {
         name: "",
         summary: "",
-        healthScore: 0,
+        healthScore: "",
         dishTypes: "",
         steps: [""],
         image: "",
@@ -90,6 +90,10 @@ function validate(input){
     if(input.healthScore > 100){
         errors.healthScore = "HelthScore no puede ser mayora a 100"
     }
+
+    // if(input.healthScore === 0){
+    //     errors.healthScore = "HelthScore no puede ser 0"
+    // }
     // console.log(errors)
     if(Object.entries(errors).length === 0){
         setDisable(false)
@@ -171,13 +175,14 @@ function validate(input){
 
     return (
         <div>
-            <Link to='/home'><button>Volver</button></Link>
+            <Link to='/home'><button className='botonCrearReceta'>Volver</button></Link>
             <h1>Crea tu Receta</h1>
-            <h2>{message}</h2>
+            <h2 className='mensajeCreacion'>{message}</h2>
             <form onSubmit={e => handleSubmit(e)}>
                 <div>
                     <label>Nombre: </label>
-                    <input
+                    <input 
+                        className='inputs'
                         type="text"
                         value={input.name}
                         name="name"
@@ -189,6 +194,7 @@ function validate(input){
                 <div>
                     <label>Summary: </label>
                     <input
+                        className='inputs'
                         type="text"
                         value={input.summary}
                         name="summary"
@@ -196,9 +202,10 @@ function validate(input){
                     />
                     {errors.summary && (<p className='error'>{errors.summary}</p>)}
                 </div>
-                <div>
+                <div >
                     <label>Healthscore: </label>
                     <input
+                        className='inputs'
                         type="number"
                         value={input.healthScore}
                         name="healthScore"
@@ -206,9 +213,10 @@ function validate(input){
                     />
                      {errors.healthScore && (<p className='error'>{errors.healthScore}</p>)}
                 </div>
-                <div>
+                <div >
                     <label>Dishtypes: </label>
                     <input
+                        className='inputs'
                         type="text"
                         value={input.dishTypes}
                         name="dishTypes"
@@ -217,9 +225,10 @@ function validate(input){
                 </div>
 
 
-                <div>
+                <div >
                     <label>Image URL: </label>
                     <input
+                        className='inputs'
                         type="text"
                         value={input.image}
                         name="image"
@@ -229,16 +238,6 @@ function validate(input){
 
                 <div>
 
-                    {/* {
-                        allDiets.map(el => {
-                            return (
-                                <Diets
-                                    key={el.id}
-                                    name={el.name}
-                                />
-                            )
-                        })
-                    } */}
                     <h3>Diets: </h3>
 
                             {allDiets.map((diet) => {
@@ -255,9 +254,10 @@ function validate(input){
                     {
                         input.steps.map((element, index) => {
                             // console.log("element:" ,element)
-                            return(<div key={`steps-${index}`}>
+                            return(<div  key={`steps-${index}`}>
                                     <label>Paso {index+1}:</label>
                                     <input
+                                        className='inputs'
                                         type="text"
                                         name={index}
                                         id={index}
