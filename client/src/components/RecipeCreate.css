@@ -22,16 +22,22 @@
 
 }
 
-label, h1, h2, h3{
+label, h2, h3{
     display: inline-block;
     width: 200px;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: Georgia, 'Times New Roman', Times, serif;
   }
 
 .mensajeCreacion {
     color: green;
 }
 
+.inputsGrandes {
+    height: 70px;
+    border-radius: 10%;
+    size: 70px;
+    resize: none;
+}
 
 /*  <div className='inputs'>
         <label>Dishtypes: </label>

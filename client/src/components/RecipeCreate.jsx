@@ -193,8 +193,8 @@ function validate(input){
                 </div>
                 <div>
                     <label>Summary: </label>
-                    <input
-                        className='inputs'
+                    <textarea
+                        className='inputsGrandes'
                         type="text"
                         value={input.summary}
                         name="summary"

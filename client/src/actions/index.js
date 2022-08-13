@@ -5,7 +5,8 @@
  export function getRecipes(){
     return async function(dispatch){
         try{
-            var json = await axios.get('http://localhost:3001/recipes')
+            // var json = await axios.get('http://localhost:3001/recipes')
+            var json = await axios.get('/recipes')
             // .then(response => { console.log("Response: ", response)})
             .catch(error => {console.log("Error: ", error)})
             return dispatch({
@@ -25,7 +26,8 @@
  export function getDiets() {
     return async function (dispatch){
         try{
-            var json = await axios.get('http://localhost:3001/diets')
+            // var json = await axios.get('http://localhost:3001/diets')
+            var json = await axios.get('/diets')
             // .then(response => { console.log("Response: ", response)})
             .catch(error => {console.log("Error: ", error)})
             return dispatch({
@@ -44,7 +46,8 @@
     
     return async function(dispatch){
         try {
-            var json = axios.post('http://localhost:3001/recipes',payload)
+            // var json = axios.post('http://localhost:3001/recipes',payload)
+            var json = axios.post('/recipes',payload)
             .catch(error => {console.log("Error: ", error)})
          //   console.log(json)
             return json;
@@ -57,7 +60,8 @@
  export function getRecipesByName(name){
     return async function(dispatch){
         try {
-            var json = await axios.get(`http://localhost:3001/recipes?name=${name}`)
+            // var json = await axios.get(`http://localhost:3001/recipes?name=${name}`)
+            var json = await axios.get(`/recipes?name=${name}`)
             // .then(response => { console.log("Response: ", response)})
             .catch(error => {console.log("Error: ", error)})
             return dispatch({
@@ -79,7 +83,8 @@
     return async function(dispatch){
         try {
             // console.log("entro aca") 
-            var json = await axios.get(`http://localhost:3001/recipes/${id}`)
+            // var json = await axios.get(`http://localhost:3001/recipes/${id}`)
+            var json = await axios.get(`/recipes/${id}`)
             .catch(error => {console.log("Error: ", error)})
             // console.log("Json. data: ", json.data)
             return dispatch({

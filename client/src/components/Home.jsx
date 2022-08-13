@@ -103,7 +103,7 @@ export default function Home(){
             <NavLink style={{textDecoration: "none", 
                              color: "green", 
                              fontFamily: "cursive", 
-                             fontSize: "25px",
+                             fontSize: "35px",
                              padding: "15px"}} to= '/recipes'>Crear receta</NavLink>
             <form onSubmit={handleSumbit}>
                 <input type='text'  

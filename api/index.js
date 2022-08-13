@@ -64,9 +64,15 @@ let dietsApi = [
 }
 
 // Syncing all the models at once.
-conn.sync({ force: false }).then(async () => {
-  await preChargeDiets();
-  server.listen(3001, () => {
-    console.log('%s listening at 3001'); // eslint-disable-line no-console
+// conn.sync({ force: false }).then(async () => {
+//   await preChargeDiets();
+//   server.listen(3001, () => {
+//     console.log('%s listening at 3001'); // eslint-disable-line no-console
+//   });
+// });
+
+conn.sync({ force: false }).then(() => {
+    server.listen(process.env.PORT, () => {
+      console.log("%s listening at 3000"); // eslint-disable-line no-console
+    });
   });
-});
